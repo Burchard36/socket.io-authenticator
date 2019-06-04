@@ -7,8 +7,8 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'simhacknoreply@gmail.com',
-        pass: 'zrcqyjfogixflmby'
+        user: 'your email here',
+        pass: 'your password here'
     }
 });
 
@@ -96,11 +96,11 @@ io.on('connection', function (socket) {
                                     // If the email is not taken, generate a varification code, and send an email
                                     let code = encrypt(Math.floor(Math.random() * 999999).toString()); 
                                     var mailOptions = {
-                                        from: 'simhacknoreply@gmail.com',
+                                        from: 'your gmail',
                                         to: email,
-                                        subject: 'Welcome to Sim Hack!',
-                                        html: '<h2 style="text-align: center;">Welcome to SimHack!</h2><p style="text-align: center;">Your registration code is ' +
-                                            data.URL + "?validate=" + code + '.</p><p style="align-right;">You have 10 minutes to activate your account or it gets deleted!</p>',
+                                        subject: 'your subject here',
+                                        html: '<h2 style="text-align: center;">Your message here</h2><p style="text-align: center;">Your registration code is ' +
+                                            code + '.</p><p style="align-right;">You have 10 minutes to activate your account or it gets deleted!</p>',
                                     };
                                     // Send a varification email
                                     transporter.sendMail(mailOptions, function (err, info) {
