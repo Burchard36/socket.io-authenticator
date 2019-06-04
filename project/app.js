@@ -232,61 +232,6 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on("pageLogin", function (data) {
-        let username = data.Username;
-        let password = data.Password;
-        console.log(password);
-        let address = socket.handshake.address;
-        // Checks if the username is valid
-        if (sanitizeUsername(username)) {
-            // If the username is good, do stuff here
-            if (sanitizePassword(password)) {
-                userString = username;
-                // If the password is good, do stuff here
-                con.query("SELECT * FROM `Validate` WHERE `Username` = ? ", [username], function (err, fields) {
-                    if (fields[0] === undefined) {
-                        // If the users account is validated, do stuff here
-                        con.query("SELECT * FROM `Users` WHERE `Username` = ? ", [username], function (err, fields) {
-                            if (fields[0] === undefined) {
-                                // If the account doesnt exist, do stuff here
-                                socket.emit("noAccountHere", data);
-                                return;
-                            } else {
-                                // If the account exists, do stuff here
-                                let dataPass = fields[0].Password;
-                                console.log(dataPass);
-                                if (password.toString() === dataPass) {
-                                    // If the passwords match, log the user in
-                                    data = { UsernameString: decrypt(username.toString()), Username: username, Password: password }
-                                    socket.emit("successLogin", data);
-                                    return;
-                                } else {
-                                    // if the passwords dont match, do stuff here
-                                    socket.emit("incorrectPassword", data);
-                                    return;
-                                }
-                            }
-                        });
-                    } else {
-                        // If the users account is not validated, do stuff here
-                        socket.emit("notValid", data);
-                        return;
-                    }
-                });
-            } else {
-                // If the password is bad, do stuff here
-                console.log(prefix + " " + address + " entered this value as a password: " + username + " LOGGED AS POTENTIAL SQL INJECTION");
-                socket.emit("sqlInjection", data);
-                return;
-            }
-        } else {
-            // If the username is bad, do stuff here
-            console.log(prefix + " " + address + " entered this value as a username: " + username + " LOGGED AS POTENTIAL SQL INJECTION");
-            socket.emit("sqlInjection", data);
-            return;
-        }
-    });
-
     socket.on("confirmEmail", function (data) {
         let address = socket.handshake.address;
         let code = data.Code;
